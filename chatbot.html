@@ -1,0 +1,1423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paddy Farming Expert - Complete Agricultural Assistant</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary-color: #2e7d32;
+            --primary-light: #4caf50;
+            --primary-dark: #1b5e20;
+            --secondary-color: #ff9800;
+            --accent-color: #8bc34a;
+            --background-light: #f1f8e9;
+            --background-lighter: #f9fbe7;
+            --text-dark: #1b5e20;
+            --text-light: white;
+            --shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --gradient: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+        }
+        
+        body {
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            background-color: white;
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 95vh;
+        }
+        
+        header {
+            background: var(--gradient);
+            color: var(--text-light);
+            padding: 24px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .bot-icon {
+            width: 80px;
+            height: 80px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 40px;
+            color: var(--primary-light);
+            box-shadow: var(--shadow);
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .header-text {
+            text-align: left;
+        }
+        
+        h1 {
+            font-size: 32px;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+        
+        .chat-container {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            background-color: var(--background-lighter);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(232, 245, 233, 0.3) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(200, 230, 201, 0.3) 0%, transparent 20%);
+        }
+        
+        .message {
+            max-width: 80%;
+            padding: 18px 22px;
+            border-radius: 20px;
+            line-height: 1.6;
+            position: relative;
+            animation: fadeIn 0.4s ease;
+            box-shadow: var(--shadow-light);
+            transition: transform 0.2s;
+        }
+        
+        .message:hover {
+            transform: translateY(-2px);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .bot-message {
+            align-self: flex-start;
+            background-color: white;
+            border-bottom-left-radius: 6px;
+            color: var(--text-dark);
+            border-left: 4px solid var(--primary-light);
+        }
+        
+        .user-message {
+            align-self: flex-end;
+            background: var(--gradient);
+            color: var(--text-light);
+            border-bottom-right-radius: 6px;
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
+        }
+        
+        .input-area {
+            display: flex;
+            padding: 20px;
+            background-color: white;
+            border-top: 1px solid #e0e0e0;
+            gap: 15px;
+        }
+        
+        #user-input {
+            flex: 1;
+            padding: 16px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 50px;
+            outline: none;
+            font-size: 16px;
+            background-color: white;
+            box-shadow: var(--shadow-light);
+            transition: all 0.3s;
+        }
+        
+        #user-input:focus {
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+        }
+        
+        #send-btn {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 22px;
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+            transition: all 0.3s;
+        }
+        
+        #send-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4);
+        }
+        
+        .suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding: 16px 20px;
+            background-color: white;
+            border-top: 1px solid #e0e0e0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .suggestion {
+            background-color: white;
+            border: 2px solid var(--primary-light);
+            border-radius: 50px;
+            padding: 10px 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            color: var(--primary-dark);
+        }
+        
+        .suggestion:hover {
+            background-color: var(--primary-light);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(76, 175, 80, 0.2);
+        }
+        
+        .typing-indicator {
+            display: inline-block;
+            padding: 16px 22px;
+            background-color: white;
+            border-radius: 20px;
+            border-bottom-left-radius: 6px;
+            box-shadow: var(--shadow-light);
+        }
+        
+        .typing-dots {
+            display: flex;
+            gap: 6px;
+        }
+        
+        .typing-dot {
+            width: 10px;
+            height: 10px;
+            background-color: var(--primary-light);
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+        
+        .typing-dot:nth-child(1) { animation-delay: 0s; }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.6; }
+            30% { transform: translateY(-8px); opacity: 1; }
+        }
+        
+        .info-box {
+            background-color: #e8f5e9;
+            border-left: 4px solid var(--primary-light);
+            padding: 16px 20px;
+            margin: 15px 0;
+            border-radius: 0 12px 12px 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .warning-box {
+            background-color: #ffecb3;
+            border-left: 4px solid var(--secondary-color);
+            padding: 16px 20px;
+            margin: 15px 0;
+            border-radius: 0 12px 12px 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .step-list {
+            padding-left: 24px;
+            margin: 12px 0;
+        }
+        
+        .step-list li {
+            margin-bottom: 10px;
+            position: relative;
+        }
+        
+        .step-list li:before {
+            content: "•";
+            color: var(--primary-light);
+            font-weight: bold;
+            display: inline-block;
+            width: 1em;
+            margin-left: -1em;
+            font-size: 1.2em;
+        }
+        
+        .highlight {
+            background-color: #fff9c4;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        
+        .detail-section {
+            margin: 18px 0;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .detail-section h4 {
+            color: var(--text-dark);
+            margin-bottom: 10px;
+            font-size: 17px;
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+        }
+        
+        .detail-section h4 i {
+            margin-right: 10px;
+            color: var(--primary-light);
+        }
+        
+        .topic-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 16px;
+            margin: 20px 0;
+        }
+        
+        .topic-item {
+            background: white;
+            padding: 20px 16px;
+            border-radius: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            box-shadow: var(--shadow-light);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 120px;
+        }
+        
+        .topic-item i {
+            font-size: 32px;
+            margin-bottom: 12px;
+            color: var(--primary-light);
+            transition: all 0.3s;
+        }
+        
+        .topic-item:hover {
+            background: var(--primary-light);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.2);
+            border-color: var(--primary-light);
+        }
+        
+        .topic-item:hover i,
+        .topic-item:hover span {
+            color: white;
+        }
+        
+        .topic-item span {
+            font-weight: 600;
+            color: var(--text-dark);
+            transition: all 0.3s;
+        }
+        
+        .category-section {
+            margin: 24px 0;
+            padding: 20px;
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: var(--shadow-light);
+            border-top: 4px solid var(--primary-light);
+        }
+        
+        .category-title {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+        }
+        
+        .category-title i {
+            margin-right: 12px;
+            font-size: 24px;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            margin: 18px 0;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 18px 0;
+            background: white;
+        }
+        
+        .comparison-table th, .comparison-table td {
+            border: 1px solid #e0e0e0;
+            padding: 12px 16px;
+            text-align: left;
+        }
+        
+        .comparison-table th {
+            background-color: var(--primary-light);
+            color: white;
+            font-weight: 600;
+        }
+        
+        .comparison-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .comparison-table tr:hover {
+            background-color: #f1f8e9;
+        }
+        
+        .quick-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+        
+        .quick-action {
+            background-color: white;
+            border: 2px solid var(--primary-light);
+            border-radius: 50px;
+            padding: 8px 16px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            color: var(--primary-dark);
+        }
+        
+        .quick-action:hover {
+            background-color: var(--primary-light);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(76, 175, 80, 0.2);
+        }
+        
+        .welcome-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 30px;
+            background-color: white;
+            border-radius: 20px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-light);
+            border-top: 4px solid var(--primary-light);
+        }
+        
+        .welcome-icon {
+            font-size: 64px;
+            color: var(--primary-light);
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .welcome-text {
+            margin-bottom: 24px;
+        }
+        
+        .welcome-text h2 {
+            color: var(--primary-dark);
+            margin-bottom: 12px;
+            font-size: 28px;
+        }
+        
+        .welcome-text p {
+            color: #666;
+            font-size: 16px;
+            max-width: 600px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-top: 20px;
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .stat-item {
+            background-color: var(--background-light);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+        }
+        
+        .stat-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+        
+        .featured-topic {
+            background-color: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: var(--shadow-light);
+            border-left: 4px solid var(--secondary-color);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .featured-icon {
+            font-size: 40px;
+            color: var(--secondary-color);
+        }
+        
+        .featured-content h3 {
+            color: var(--text-dark);
+            margin-bottom: 8px;
+            font-size: 20px;
+        }
+        
+        .featured-content p {
+            color: #666;
+            font-size: 15px;
+        }
+        
+        .message-time {
+            font-size: 12px;
+            opacity: 0.7;
+            margin-top: 8px;
+            text-align: right;
+        }
+        
+        .bot-message .message-time {
+            text-align: left;
+        }
+        
+        .formula-box {
+            background-color: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 16px 20px;
+            margin: 15px 0;
+            border-radius: 0 12px 12px 0;
+            font-family: 'Courier New', monospace;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .calculation-box {
+            background-color: #fff3e0;
+            border: 1px solid #ff9800;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                height: 100vh;
+                border-radius: 0;
+            }
+            
+            header {
+                padding: 20px;
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .bot-icon {
+                width: 70px;
+                height: 70px;
+                font-size: 32px;
+            }
+            
+            h1 {
+                font-size: 26px;
+            }
+            
+            .message {
+                max-width: 90%;
+            }
+            
+            .topic-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .suggestions {
+                justify-content: center;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .featured-topic {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+        
+       
+        .chat-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .chat-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        
+        .chat-container::-webkit-scrollbar-thumb {
+            background: var(--primary-light);
+            border-radius: 10px;
+        }
+        
+        .chat-container::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div class="bot-icon">🌱</div>
+                <div class="header-text">
+                    <h1>Paddy Farming Expert</h1>
+                    <p class="subtitle">Your comprehensive guide to rice cultivation</p>
+                </div>
+            </div>
+        </header>
+        
+        <div class="chat-container" id="chat-container">
+            <div class="welcome-section">
+                <div class="welcome-icon">
+                    <i class="fas fa-seedling"></i>
+                </div>
+                <div class="welcome-text">
+                    <h2>Welcome to Paddy Farming Expert</h2>
+                    <p>Your AI assistant for comprehensive rice cultivation guidance and best practices</p>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-value">177+</div>
+                        <div class="stat-label">Expert Topics</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">12</div>
+                        <div class="stat-label">Farming Sectors</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="featured-topic">
+                <div class="featured-icon">
+                    <i class="fas fa-star"></i>
+                </div>
+                <div class="featured-content">
+                    <h3>Featured Topic: Soil Management & Nutrition</h3>
+                    <p>Learn about soil testing, nutrient management, and soil health for optimal paddy growth.</p>
+                </div>
+            </div>
+            
+            <div class="message bot-message">
+                <p>Hello! I'm your Paddy Farming Expert, here to provide detailed information about all aspects of rice cultivation.</p>
+                <div class="info-box">
+                    <strong>I can help with:</strong> Soil management, fertilizer application, pest control, water management, cultivation techniques, and much more.
+                </div>
+                <p>What would you like to know about paddy farming today?</p>
+                
+                <div class="category-section">
+                    <div class="category-title">
+                        <i class="fas fa-vial"></i> Soil Testing & Analysis
+                    </div>
+                    <div class="topic-grid">
+                        <div class="topic-item" data-question="What are the different methods of soil testing in paddy fields?">
+                            <i class="fas fa-flask"></i>
+                            <span>Soil Testing Methods</span>
+                        </div>
+                        <div class="topic-item" data-question="How to interpret soil test reports for rice cultivation?">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Soil Test Interpretation</span>
+                        </div>
+                        <div class="topic-item" data-question="What are common nutrient deficiency symptoms in rice plants?">
+                            <i class="fas fa-leaf"></i>
+                            <span>Nutrient Deficiencies</span>
+                        </div>
+                        <div class="topic-item" data-question="How to set soil before seeding?">
+                            <i class="fas fa-tractor"></i>
+                            <span>Soil Preparation</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="category-section">
+                    <div class="category-title">
+                        <i class="fas fa-prescription-bottle"></i> Nutrient Management
+                    </div>
+                    <div class="topic-grid">
+                        <div class="topic-item" data-question="How to correct nitrogen deficiency in paddy?">
+                            <i class="fas fa-atom"></i>
+                            <span>Nitrogen Deficiency</span>
+                        </div>
+                        <div class="topic-item" data-question="What are the remedies for phosphorus deficiency in rice?">
+                            <i class="fas fa-fire"></i>
+                            <span>Phosphorus Deficiency</span>
+                        </div>
+                        <div class="topic-item" data-question="How to identify and treat potassium deficiency in paddy?">
+                            <i class="fas fa-bolt"></i>
+                            <span>Potassium Deficiency</span>
+                        </div>
+                        <div class="topic-item" data-question="How to manage zinc deficiency in rice fields?">
+                            <i class="fas fa-microscope"></i>
+                            <span>Zinc Deficiency</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category-section">
+                    <div class="category-title">
+                        <i class="fas fa-tint"></i> Water & Soil Management
+                    </div>
+                    <div class="topic-grid">
+                        <div class="topic-item" data-question="How to manage acidic soils for paddy cultivation?">
+                            <i class="fas fa-vial"></i>
+                            <span>Acidic Soil Management</span>
+                        </div>
+                        <div class="topic-item" data-question="How to reclaim saline soils for rice farming?">
+                            <i class="fas fa-water"></i>
+                            <span>Saline Soil Reclamation</span>
+                        </div>
+                        <div class="topic-item" data-question="What is the importance of organic matter in rice fields?">
+                            <i class="fas fa-recycle"></i>
+                            <span>Organic Matter Importance</span>
+                        </div>
+                        <div class="topic-item" data-question="Why my crop is not growing?">
+                            <i class="fas fa-question-circle"></i>
+                            <span>Crop Growth Issues</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quick-actions">
+                    <div class="quick-action" data-question="What are the types of fertilizers used in paddy farming?">Fertilizer Types</div>
+                    <div class="quick-action" data-question="What are integrated pest management (IPM) strategies for rice?">IPM Strategies</div>
+                    <div class="quick-action" data-question="What are sustainable soil conservation practices for rice farmers?">Soil Conservation</div>
+                    <div class="quick-action" data-question="How to increase soil organic carbon in paddy soils?">Organic Carbon</div>
+                </div>
+                
+                <div class="message-time" id="initial-time"></div>
+            </div>
+        </div>
+        
+        <div class="suggestions">
+            <div class="suggestion" data-question="Why my crop is not growing?">Crop Growth Issues</div>
+            <div class="suggestion" data-question="How to set soil before seeding?">Soil Preparation</div>
+            <div class="suggestion" data-question="What are the different methods of soil testing in paddy fields?">Soil Testing Methods</div>
+            <div class="suggestion" data-question="How to interpret soil test reports for rice cultivation?">Soil Test Interpretation</div>
+        </div>
+        
+        <div class="input-area">
+            <input type="text" id="user-input" placeholder="Ask any question about paddy farming...">
+            <button id="send-btn">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatContainer = document.getElementById('chat-container');
+            const userInput = document.getElementById('user-input');
+            const sendBtn = document.getElementById('send-btn');
+            const suggestions = document.querySelectorAll('.suggestion');
+            const topicItems = document.querySelectorAll('.topic-item');
+            const quickActions = document.querySelectorAll('.quick-action');
+            const initialTime = document.getElementById('initial-time');
+            
+           
+            initialTime.textContent = getCurrentTime();
+            
+          
+            const knowledgeBase = {
+               
+                "why my crop is not growing": `
+                    <h4><i class="fas fa-question-circle"></i> Why My Paddy Crop Is Not Growing Properly</h4>
+                    
+                    <p>Several factors can affect paddy crop growth. Let's diagnose potential issues:</p>
+                    
+                    <div class="detail-section">
+                        <h4><i class="fas fa-seedling"></i> Common Growth Problems & Solutions:</h4>
+                        <ul class="step-list">
+                            <li><span class="highlight">Poor Germination</span>: Check seed quality, sowing depth, and soil moisture</li>
+                            <li><span class="highlight">Yellowing Leaves</span>: Could indicate nutrient deficiency (N, Fe, Zn)</li>
+                            <li><span class="highlight">Stunted Growth</span>: Check soil pH, compaction, or root diseases</li>
+                            <li><span class="highlight">Wilting Plants</span>: Water stress or root rot issues</li>
+                            <li><span class="highlight">Poor Tillering</span>: Often related to nitrogen deficiency or planting density</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h4><i class="fas fa-clipboard-list"></i> Diagnostic Checklist:</h4>
+                        <ul class="step-list">
+                            <li>Conduct soil test for pH and nutrients</li>
+                            <li>Check water management practices</li>
+                            <li>Inspect for pest and disease symptoms</li>
+                            <li>Review planting timing and methods</li>
+                            <li>Evaluate weather conditions impact</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="info-box">
+                        <strong>Immediate Actions:</strong> Check soil moisture, look for visible pest damage, and consider a foliar nutrient spray if deficiency symptoms are visible.
+                    </div>
+                    
+                    <div class="quick-actions">
+                        <div class="quick-action" data-question="What are common nutrient deficiency symptoms in rice plants?">Nutrient Deficiencies</div>
+                        <div class="quick-action" data-question="How to interpret soil test reports for rice cultivation?">Soil Test Interpretation</div>
+                        <div class="quick-action" data-question="What are the common insect pests of rice and their control?">Pest Identification</div>
+                    </div>
+                    
+                    <div class="message-time">${getCurrentTime()}</div>
+                `,
+
+                // Soil Preparation
+                "how to set soil before seeding": `
+                    <h4><i class="fas fa-tractor"></i> How to Prepare Soil Before Seeding Paddy</h4>
+                    
+                    <p>Proper soil preparation is crucial for successful paddy cultivation:</p>
+                    
+                    <div class="detail-section">
+                        <h4><i class="fas fa-list-ol"></i> Step-by-Step Soil Preparation:</h4>
+                        <ul class="step-list">
+                            <li><span class="highlight">Field Cleaning</span>: Remove weeds, stubbles, and previous crop residues</li>
+                            <li><span class="highlight">Initial Plowing</span>: Deep plowing (15-20 cm) with moldboard plow</li>
+                            <li><span class="highlight">Harrowing</span>: 2-3 cross harrowings to break soil clods</li>
+                            <li><span class="highlight">Leveling</span>: Use laser leveler for uniform water distribution</li>
+                            <li><span class="highlight">Puddling</span>: Create impermeable layer to reduce water percolation</li>
+                            <li><span class="highlight">Basin Preparation</span>: Form proper basins and bunds</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h4><i class="fas fa-flask"></i> Soil Amendment Recommendations:</h4>
+                        <ul class="step-list">
+                            <li><span class="highlight">Organic Matter</span>: Apply 5-10 tons/ha of well-decomposed FYM</li>
+                            <li><span class="highlight">Lime Application</span>: For acidic soils (pH < 5.5), apply 2-4 tons/ha</li>
+                            <li><span class="highlight">Green Manuring</span>: Incorporate dhaincha or sunhemp 45 days before planting</li>
+                            <li><span class="highlight">Basal Fertilizers</span>: Apply recommended NPK based on soil test</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table class="comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>Soil Type</th>
+                                    <th>Preparation Method</th>
+                                    <th>Special Considerations</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Clayey Soil</strong></td>
+                                    <td>Minimum tillage, proper drainage</td>
+                                    <td>Avoid over-puddling, ensure good aeration</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Sandy Soil</strong></td>
+                                    <td>Repeated puddling, organic matter addition</td>
+                                    <td>Focus on water retention, frequent irrigation</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Loamy Soil</strong></td>
+                                    <td>Standard preparation methods</td>
+                                    <td>Ideal for paddy, maintain organic matter</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="quick-actions">
+                        <div class="quick-action" data-question="What are the different methods of soil testing in paddy fields?">Soil Testing</div>
+                        <div class="quick-action" data-question="What is the importance of organic matter in rice fields?">Organic Matter</div>
+                        <div class="quick-action" data-question="How to manage acidic soils for paddy cultivation?">Acidic Soil Management</div>
+                    </div>
+                    
+                    <div class="message-time">${getCurrentTime()}</div>
+                `,
+
+                
+                "what are the different methods of soil testing in paddy fields": `
+                    <h4><i class="fas fa-flask"></i> Soil Testing Methods for Paddy Fields</h4>
+                    
+                    <p>Various soil testing methods help assess soil health for paddy cultivation:</p>
+                    
+                    <div class="table-container">
+                        <table class="comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>Testing Method</th>
+                                    <th>Parameters Measured</th>
+                                    <th>Procedure</th>
+                                    <th>Equipment Needed</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Chemical Analysis</strong></td>
+                                    <td>NPK, pH, EC, Organic Carbon</td>
+                                    <td>Lab analysis of soil samples</td>
+                                    <td>Spectrophotometer, pH meter</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Physical Analysis</strong></td>
+                                    <td>Texture, Structure, Bulk Density</td>
+                                    <td>Field and lab measurements</td>
+                                    <td>Soil auger, density rings</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Biological Analysis</strong></td>
+                                    <td>Microbial activity, Earthworms</td>
+                                    <td>Incubation and counting methods</td>
+                                    <td>Microscope, incubation chambers</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Rapid Test Kits</strong></td>
+                                    <td>Basic NPK, pH</td>
+                                    <td>Colorimetric field tests</td>
+                                    <td>Portable test kits</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Sensor-based</strong></td>
+                                    <td>Moisture, pH, Nutrients</td>
+                                    <td>Electronic sensor readings</td>
+                                    <td>Soil sensors, IoT devices</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h4><i class="fas fa-map-marker-alt"></i> Soil Sampling Procedure:</h4>
+                        <ul class="step-list">
+                            <li>Divide field into uniform areas (2-5 acres each)</li>
+                            <li>Take 15-20 random samples from 0-15 cm depth</li>
+                            <li>Use clean tools to avoid contamination</li>
+                            <li>Mix samples thoroughly to make composite sample</li>
+                            <li>Air dry and send 500g to accredited laboratory</li>
+                            <li>Label properly with field details and coordinates</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="info-box">
+                        <strong>Sampling Time:</strong> Best time for soil sampling is after harvest or at least 3-4 weeks before next planting season.
+                    </div>
+                    
+                    <div class="quick-actions">
+                        <div class="quick-action" data-question="How to interpret soil test reports for rice cultivation?">Test Interpretation</div>
+                        <div class="quick-action" data-question="What are common nutrient deficiency symptoms in rice plants?">Deficiency Symptoms</div>
+                        <div class="quick-action" data-question="How to correct nitrogen deficiency in paddy?">Nitrogen Management</div>
+                    </div>
+                    
+                    <div class="message-time">${getCurrentTime()}</div>
+                `,
+
+               
+                "how to interpret soil test reports for rice cultivation": `
+                    <h4><i class="fas fa-chart-bar"></i> Interpreting Soil Test Reports for Rice</h4>
+                    
+                    <p>Understanding soil test results helps in making informed fertilizer decisions:</p>
+                    
+                    <div class="table-container">
+                        <table class="comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Low</th>
+                                    <th>Medium</th>
+                                    <th>High</th>
+                                    <th>Optimal for Paddy</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>pH</strong></td>
+                                    <td>&lt; 5.5</td>
+                                    <td>5.5-6.5</td>
+                                    <td>&gt; 6.5</td>
+                                    <td>5.5-6.5</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Organic Carbon (%)</strong></td>
+                                    <td>&lt; 0.5</td>
+                                    <td>0.5-0.75</td>
+                                    <td>&gt; 0.75</td>
+                                    <td>&gt; 0.75</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Available N (kg/ha)</strong></td>
+                                    <td>&lt; 280</td>
+                                    <td>280-560</td>
+                                    <td>&gt; 560</td>
+                                    <td>280-560</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Available P (kg/ha)</strong></td>
+                                    <td>&lt; 10</td>
+                                    <td>10-25</td>
+                                    <td>&gt; 25</td>
+                                    <td>15-25</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Available K (kg/ha)</strong></td>
+                                    <td>&lt; 110</td>
+                                    <td>110-280</td>
+                                    <td>&gt; 280</td>
+                                    <td>150-280</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h4><i class="fas fa-calculator"></i> Fertilizer Recommendation Formula:</h4>
+                        <div class="formula-box">
+                            Fertilizer Required (kg/ha) = (Target Nutrient - Soil Available Nutrient) / Fertilizer Efficiency
+                        </div>
+                        <ul class="step-list">
+                            <li><span class="highlight">Nitrogen Efficiency</span>: 50-60% in paddy soils</li>
+                            <li><span class="highlight">Phosphorus Efficiency</span>: 20-30% in first season</li>
+                            <li><span class="highlight">Potassium Efficiency</span>: 60-70% in most soils</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="warning-box">
+                        <strong>Important:</strong> Always consider local conditions, rice variety, and previous crop history while interpreting soil test results.
+                    </div>
+                    
+                    <div class="quick-actions">
+                        <div class="quick-action" data-question="How to correct nitrogen deficiency in paddy?">Nitrogen Correction</div>
+                        <div class="quick-action" data-question="What are the remedies for phosphorus deficiency in rice?">Phosphorus Remedies</div>
+                        <div class="quick-action" data-question="How to identify and treat potassium deficiency in paddy?">Potassium Treatment</div>
+                    </div>
+                    
+                    <div class="message-time">${getCurrentTime()}</div>
+                `,
+
+                
+                "what are common nutrient deficiency symptoms in rice plants": `
+                    <h4><i class="fas fa-leaf"></i> Common Nutrient Deficiency Symptoms in Rice</h4>
+                    
+                    <p>Recognizing deficiency symptoms helps in timely nutrient management:</p>
+                    
+                    <div class="table-container">
+                        <table class="comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>Nutrient</th>
+                                    <th>Deficiency Symptoms</th>
+                                    <th>Appears First On</th>
+                                    <th>Critical Stage</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Nitrogen (N)</strong></td>
+                                    <td>Pale yellow leaves, stunted growth, reduced tillering</td>
+                                    <td>Older leaves</td>
+                                    <td>Tillering to panicle initiation</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Phosphorus (P)</strong></td>
+                                    <td>Dark green leaves, purple discoloration, poor root growth</td>
+                                    <td>All leaves</td>
+                                    <td>Early growth stages</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Potassium (K)</strong></td>
+                                    <td>Yellow/brown leaf margins, weak stems, lodging</td>
+                                    <td>Older leaves</td>
+                                    <td>Maximum tillering to flowering</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Zinc (Zn)</strong></td>
+                                    <td>Bronzing of leaves, stunted growth, delayed maturity</td>
+                                    <td>Young leaves</td>
+                                    <td>2-4 weeks after transplanting</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Iron (Fe)</strong></td>
+                                    <td>Interveinal chlorosis, pale yellow leaves</td>
+                                    <td>Young leaves</td>
+                                    <td>Early growth stages</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h4><i class="fas fa-diagnoses"></i> Visual Identification Guide:</h4>
+                        <ul class="step-list">
+                            <li><span class="highlight">Nitrogen Deficiency</span>: Uniform yellowing, reduced plant vigor</li>
+                            <li><span class="highlight">Phosphorus Deficiency</span>: Purplish tint on leaves, poor establishment</li>
+                            <li><span class="highlight">Potassium Deficiency</span>: "Burning" of leaf tips and margins</li>
+                            <li><span class="highlight">Zinc Deficiency</span>: "Khaira disease" - rusty brown spots</li>
+                            <li><span class="highlight">Iron Deficiency</span>: Yellow stripes between green veins</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="info-box">
+                        <strong>Confirmation:</strong> Always confirm visual symptoms with soil and plant tissue analysis for accurate diagnosis.
+                    </div>
+                    
+                    <div class="quick-actions">
+                        <div class="quick-action" data-question="How to correct nitrogen deficiency in paddy?">Nitrogen Correction</div>
+                        <div class="quick-action" data-question="What are the remedies for phosphorus deficiency in rice?">Phosphorus Remedies</div>
+                        <div class="quick-action" data-question="How to manage zinc deficiency in rice fields?">Zinc Management</div>
+                    </div>
+                    
+                    <div class="message-time">${getCurrentTime()}</div>
+                `,
+
+               
+                "how to correct nitrogen deficiency in paddy": `
+                    <h4><i class="fas fa-atom"></i> Correcting Nitrogen Deficiency in Paddy</h4>
+                    
+                    <p>Nitrogen is crucial for paddy growth and yield. Here's how to address deficiency:</p>
+                    
+                    <div class="detail-section">
+                        <h4><i class="fas fa-syringe"></i> Immediate Correction Measures:</h4>
+                        <ul class="step-list">
+                            <li><span class="highlight">Top Dressing</span>: Apply 20-30 kg N/ha as urea immediately</li>
+                            <li><span class="highlight">Foliar Spray</span>: 2% urea solution (2 kg urea in 100L water)</li>
+                            <li><span class="highlight">Split Application</span>: Divide total N into 3-4 applications</li>
+                            <li><span class="highlight">Water Management</span>: Maintain proper water level after application</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table class="comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>Growth Stage</th>
+                                    <th>Recommended N (kg/ha)</th>
+                                    <th>Application Method</th>
+                                    <th>Timing</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Basal</strong></td>
+                                    <td>20-25% of total</td>
+                                    <td>Broadcast before pudding</td>
+                                    <td>Last ploughing</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Active Tillering</strong></td>
+                                    <td>30-35% of total</td>
+                                    <td>Top dressing</td>
+                                    <td>20-25 DAT</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Panicle Initiation</strong></td>
+                                    <td>30-35% of total</td>
+                                    <td>Top dressing</td>
+                                    <td>40-45 DAT</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Heading Stage</strong></td>
+                                    <td>10-15% of total</td>
+                                    <td>Foliar spray if needed</td>
+                                    <td>60-70 DAT</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h4><i class="fas fa-seedling"></i> Long-term Management:</h4>
+                        <ul class="step-list">
+                            <li>Use slow-release nitrogen fertilizers</li>
+                            <li>Incorporate green manure crops</li>
+                            <li>Apply organic manures regularly</li>
+                            <li>Practice crop rotation with legumes</li>
+                            <li>Use nitrification inhibitors</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="warning-box">
+                        <strong>Precaution:</strong> Avoid nitrogen application during water stress conditions and ensure proper drainage to prevent nitrogen losses.
+                    </div>
+                    
+                    <div class="quick-actions">
+                        <div class="quick-action" data-question="What are the types of fertilizers used in paddy farming?">Fertilizer Types</div>
+                        <div class="quick-action" data-question="What is the importance of organic matter in rice fields?">Organic Matter</div>
+                        <div class="quick-action" data-question="How to increase soil organic carbon in paddy soils?">Soil Carbon</div>
+                    </div>
+                    
+                    <div class="message-time">${getCurrentTime()}</div>
+                `,
+
+                
+                "default": `
+                    <p>Thank you for your question about paddy farming. I'd be happy to provide detailed information on this topic.</p>
+                    <div class="info-box">
+                        <strong>For comprehensive guidance, I recommend:</strong>
+                        <ul class="step-list">
+                            <li>Consulting with your local agricultural extension service</li>
+                            <li>Reviewing research from agricultural universities</li>
+                            <li>Considering soil and water testing for precise recommendations</li>
+                        </ul>
+                    </div>
+                    <p>I can provide detailed information on many paddy farming topics. Which specific area interests you?</p>
+                    
+                    <div class="quick-actions">
+                        <div class="quick-action" data-question="Why my crop is not growing?">Crop Growth Issues</div>
+                        <div class="quick-action" data-question="How to set soil before seeding?">Soil Preparation</div>
+                        <div class="quick-action" data-question="What are the different methods of soil testing in paddy fields?">Soil Testing</div>
+                    </div>
+                    
+                    <div class="message-time">${getCurrentTime()}</div>
+                `
+            };
+            
+            
+            function getCurrentTime() {
+                const now = new Date();
+                return now.getHours().toString().padStart(2, '0') + ':' + 
+                       now.getMinutes().toString().padStart(2, '0');
+            }
+            
+            
+            function addMessage(message, isUser = false) {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('message');
+                messageDiv.classList.add(isUser ? 'user-message' : 'bot-message');
+                
+                if (isUser) {
+                    messageDiv.textContent = message;
+                    
+                    const timeDiv = document.createElement('div');
+                    timeDiv.classList.add('message-time');
+                    timeDiv.textContent = getCurrentTime();
+                    messageDiv.appendChild(timeDiv);
+                } else {
+                    messageDiv.innerHTML = message;
+                }
+                
+                chatContainer.appendChild(messageDiv);
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+            
+            
+            function showTypingIndicator() {
+                const typingDiv = document.createElement('div');
+                typingDiv.classList.add('typing-indicator');
+                typingDiv.id = 'typing-indicator';
+                
+                const dotsDiv = document.createElement('div');
+                dotsDiv.classList.add('typing-dots');
+                
+                for (let i = 0; i < 3; i++) {
+                    const dot = document.createElement('div');
+                    dot.classList.add('typing-dot');
+                    dotsDiv.appendChild(dot);
+                }
+                
+                typingDiv.appendChild(dotsDiv);
+                chatContainer.appendChild(typingDiv);
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+                
+                return typingDiv;
+            }
+            
+            
+            function getDetailedResponse(userMessage) {
+                return new Promise(resolve => {
+                    setTimeout(() => {
+                        const lowerMessage = userMessage.toLowerCase();
+                        
+                      
+                        for (const key in knowledgeBase) {
+                            if (lowerMessage.includes(key.toLowerCase())) {
+                                resolve(knowledgeBase[key]);
+                                return;
+                            }
+                        }
+                        
+                       
+                        if (lowerMessage.includes("why") && (lowerMessage.includes("crop") || lowerMessage.includes("grow"))) {
+                            resolve(knowledgeBase["why my crop is not growing"]);
+                        } else if (lowerMessage.includes("soil") && lowerMessage.includes("prepar")) {
+                            resolve(knowledgeBase["how to set soil before seeding"]);
+                        } else if (lowerMessage.includes("soil") && lowerMessage.includes("test")) {
+                            resolve(knowledgeBase["what are the different methods of soil testing in paddy fields"]);
+                        } else if (lowerMessage.includes("soil") && lowerMessage.includes("interpret")) {
+                            resolve(knowledgeBase["how to interpret soil test reports for rice cultivation"]);
+                        } else if (lowerMessage.includes("nutrient") || lowerMessage.includes("deficiency")) {
+                            resolve(knowledgeBase["what are common nutrient deficiency symptoms in rice plants"]);
+                        } else if (lowerMessage.includes("nitrogen")) {
+                            resolve(knowledgeBase["how to correct nitrogen deficiency in paddy"]);
+                        } else {
+                            resolve(knowledgeBase["default"]);
+                        }
+                    }, 1500);
+                });
+            }
+            
+            
+            async function processUserInput() {
+                const input = userInput.value.trim();
+                if (input === '') return;
+                
+             
+                addMessage(input, true);
+                userInput.value = '';
+                
+              
+                const typingIndicator = showTypingIndicator();
+                
+                try {
+                    
+                    const response = await getDetailedResponse(input);
+                    
+                  
+                    typingIndicator.remove();
+                    
+                   
+                    addMessage(response);
+                } catch (error) {
+                   
+                    typingIndicator.remove();
+                    
+                   
+                    addMessage("I'm experiencing technical difficulties. Please try again in a moment.");
+                }
+            }
+            
+            
+            sendBtn.addEventListener('click', processUserInput);
+            
+            userInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    processUserInput();
+                }
+            });
+            
+            
+            suggestions.forEach(suggestion => {
+                suggestion.addEventListener('click', function() {
+                    userInput.value = this.getAttribute('data-question');
+                    processUserInput();
+                });
+            });
+            
+           
+            topicItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    userInput.value = this.getAttribute('data-question');
+                    processUserInput();
+                });
+            });
+            
+           
+            quickActions.forEach(action => {
+                action.addEventListener('click', function() {
+                    userInput.value = this.getAttribute('data-question');
+                    processUserInput();
+                });
+            });
+            
+            
+            chatContainer.addEventListener('click', function(e) {
+                if (e.target.classList.contains('quick-action')) {
+                    userInput.value = e.target.getAttribute('data-question');
+                    processUserInput();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

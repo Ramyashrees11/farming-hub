@@ -1,0 +1,1454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Krishi Bazaar - Farmers Market</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <style>
+       
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7f2;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        
+        header {
+            background-color: #2e7d32;
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            color: #a5d6a7;
+        }
+
+        /* User Actions */
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-actions button {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+       
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 4rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .cta-button {
+            background-color: #ff8f00;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0 0.5rem;
+        }
+
+        .cta-button:hover {
+            background-color: #f57c00;
+            transform: translateY(-2px);
+        }
+
+      
+        .container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #2e7d32;
+            font-size: 2rem;
+        }
+
+        
+        .price-ticker {
+            background-color: #1b5e20;
+            color: white;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .ticker-title {
+            text-align: center;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .ticker-container {
+            display: flex;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .ticker-item {
+            display: flex;
+            align-items: center;
+            padding: 0 2rem;
+            white-space: nowrap;
+            animation: ticker 30s linear infinite;
+        }
+
+        @keyframes ticker {
+            0% {
+                transform: translateX(100%);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        .ticker-crop {
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+
+        .ticker-price {
+            color: #ff8f00;
+            font-weight: 700;
+        }
+
+        .ticker-change {
+            margin-left: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .ticker-change.up {
+            color: #4caf50;
+        }
+
+        .ticker-change.down {
+            color: #f44336;
+        }
+
+        
+        .search-filter-container {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 300px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+        }
+
+        .filter-dropdown {
+            padding: 0.75rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: white;
+            cursor: pointer;
+            min-width: 150px;
+        }
+
+       
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .product-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .product-image {
+            height: 200px;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #2e7d32;
+        }
+
+        .product-price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #ff8f00;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-seller {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .seller-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+            background-color: #e8f5e9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+        }
+
+        .product-description {
+            color: #666;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            height: 60px;
+            overflow: hidden;
+        }
+
+        .product-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: #888;
+            margin-bottom: 1rem;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background-color: #2e7d32;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #1b5e20;
+        }
+
+        .btn-secondary {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .btn-secondary:hover {
+            background-color: #c8e6c9;
+        }
+
+        .whatsapp-btn {
+            background-color: #25D366;
+            color: white;
+        }
+
+        .whatsapp-btn:hover {
+            background-color: #128C7E;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #1b5e20;
+            color: white;
+            padding: 3rem 0;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section a {
+            color: #a5d6a7;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: white;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-icon {
+            width: 36px;
+            height: 36px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .social-icon:hover {
+            background-color: white;
+            color: #1b5e20;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            overflow: auto;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #555;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #2e7d32;
+            box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.2);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+       
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .payment-method {
+            border: 2px solid #eee;
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .payment-method.selected {
+            border-color: #2e7d32;
+            background-color: #e8f5e9;
+        }
+
+        .payment-method i {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: #666;
+        }
+
+        .payment-method.selected i {
+            color: #2e7d32;
+        }
+
+        .qr-code-container {
+            text-align: center;
+            margin: 2rem 0;
+            padding: 1rem;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+
+        .qr-code {
+            margin: 0 auto;
+        }
+
+        .qr-instructions {
+            text-align: center;
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: #e8f5e9;
+            border-radius: 8px;
+        }
+        
+        .qr-instructions ol {
+            text-align: left;
+            margin: 1rem auto;
+            max-width: 400px;
+        }
+        
+        .qr-instructions li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .upi-id {
+            background-color: #f1f8e9;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+            font-family: monospace;
+            font-weight: bold;
+        }
+
+        .card-details {
+            display: none;
+        }
+
+        .card-details.active {
+            display: block;
+        }
+
+       
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav ul {
+                gap: 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .search-filter-container {
+                flex-direction: column;
+            }
+
+            .search-box {
+                min-width: 100%;
+            }
+
+            .form-row {
+                flex-direction: column;
+            }
+
+            .payment-methods {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <i class="fas fa-seedling"></i>
+                Krishi Bazaar - Farmers Market
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#marketplace">Marketplace</a></li>
+                    <li><a href="#sell-crops">Sell Crops</a></li>
+                    <li><a href="#orders">My Orders</a></li>
+                </ul>
+            </nav>
+            <div class="user-actions">
+                <button id="login-btn"><i class="fas fa-user"></i> Login</button>
+                <button id="seller-dashboard-btn"><i class="fas fa-store"></i> Seller Dashboard</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Buy & Sell Farm Products Directly</h1>
+            <p>Connect with farmers and buyers directly for fair prices and fresh produce</p>
+            <button class="cta-button" id="browse-marketplace">Browse Marketplace</button>
+            <button class="cta-button" id="sell-now">Sell Now</button>
+        </div>
+    </section>
+
+   
+    <div class="container">
+        
+        <div class="price-ticker">
+            <div class="ticker-title">Live Market Prices (₹)</div>
+            <div class="ticker-container">
+                <div class="ticker-item">
+                    <span class="ticker-crop">Tomatoes:</span>
+                    <span class="ticker-price">₹45/kg</span>
+                    <span class="ticker-change up">↑ 5%</span>
+                </div>
+                <div class="ticker-item">
+                    <span class="ticker-crop">Wheat:</span>
+                    <span class="ticker-price">₹22/kg</span>
+                    <span class="ticker-change down">↓ 2%</span>
+                </div>
+                <div class="ticker-item">
+                    <span class="ticker-crop">Apples:</span>
+                    <span class="ticker-price">₹120/kg</span>
+                    <span class="ticker-change up">↑ 3%</span>
+                </div>
+                <div class="ticker-item">
+                    <span class="ticker-crop">Rice:</span>
+                    <span class="ticker-price">₹38/kg</span>
+                    <span class="ticker-change">→ 0%</span>
+                </div>
+                <div class="ticker-item">
+                    <span class="ticker-crop">Potatoes:</span>
+                    <span class="ticker-price">₹25/kg</span>
+                    <span class="ticker-change up">↑ 1%</span>
+                </div>
+            </div>
+        </div>
+
+     
+        <div class="search-filter-container">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="search-input" placeholder="Search for products...">
+            </div>
+            <select class="filter-dropdown" id="category-filter">
+                <option value="">All Categories</option>
+                <option value="vegetables">Vegetables</option>
+                <option value="fruits">Fruits</option>
+                <option value="grains">Grains</option>
+            </select>
+            <select class="filter-dropdown" id="price-filter">
+                <option value="">Any Price</option>
+                <option value="0-50">₹0 - ₹50</option>
+                <option value="50-100">₹50 - ₹100</option>
+                <option value="100-200">₹100 - ₹200</option>
+                <option value="200+">₹200+</option>
+            </select>
+        </div>
+
+       
+        <h2 class="section-title" id="marketplace">Farmers Market</h2>
+        <div class="product-grid" id="product-grid">
+           
+        </div>
+    </div>
+
+    
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>Krishi Bazaar - Farmers Market</h3>
+                <p>Connecting farmers directly with buyers for a sustainable agricultural future.</p>
+                <div class="social-icons">
+                    <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#marketplace">Browse Marketplace</a></li>
+                    <li><a href="#sell-crops">Sell Your Crops</a></li>
+                    <li><a href="#orders">My Orders</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Resources</h3>
+                <ul>
+                    <li><a href="#">Farming Tips</a></li>
+                    <li><a href="#">Market Prices</a></li>
+                    <li><a href="#">Weather Updates</a></li>
+                    <li><a href="#">Crop Calendar</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <ul>
+                    <li>Email: info@krishibazaar.com</li>
+                    <li>Phone: +91 98765 43210</li>
+                    <li>Address: 123 Farm Road, Punjab, India</li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; 2025 Krishi Bazaar - Farmers Market. All rights reserved.
+        </div>
+    </footer>
+
+    
+    <div class="modal" id="buy-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="buy-product-title"></h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="buy-product-price" id="buy-product-price" style="font-size: 1.3rem; font-weight: bold; color: #ff8f00; margin-bottom: 1.5rem;"></div>
+            <form id="order-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" class="form-control" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="address">Delivery Address</label>
+                    <textarea id="address" class="form-control" rows="3" required></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="quantity">Quantity (kg)</label>
+                        <input type="number" id="quantity" class="form-control" min="1" value="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="delivery-date">Preferred Delivery Date</label>
+                        <input type="date" id="delivery-date" class="form-control" required>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-primary" style="width: 100%; padding: 1rem; font-size: 1.1rem;" id="proceed-to-pay">Proceed to Pay</button>
+            </form>
+        </div>
+    </div>
+
+  
+    <div class="modal" id="payment-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Complete Your Payment</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div style="margin-bottom: 1.5rem;">
+                <p><strong>Product:</strong> <span id="payment-product-name"></span></p>
+                <p><strong>Total Amount:</strong> ₹<span id="payment-total-amount">0</span></p>
+            </div>
+            
+            <h3 style="margin-bottom: 1rem;">Select Payment Method</h3>
+            <div class="payment-methods">
+                <div class="payment-method" data-method="upi">
+                    <i class="fas fa-mobile-alt"></i>
+                    <p>UPI</p>
+                </div>
+                <div class="payment-method" data-method="card">
+                    <i class="fas fa-credit-card"></i>
+                    <p>Credit/Debit Card</p>
+                </div>
+                <div class="payment-method" data-method="cod">
+                    <i class="fas fa-money-bill-wave"></i>
+                    <p>Cash on Delivery</p>
+                </div>
+            </div>
+            
+            
+            <div id="upi-payment" class="payment-section" style="display: none;">
+                <div class="qr-code-container">
+                    <h3>Scan QR Code to Pay</h3>
+                    <div id="qr-code" class="qr-code"></div>
+                    <div class="upi-id">
+                        UPI ID: krishibazaar@ybl
+                    </div>
+                    <div class="qr-instructions">
+                        <h4>How to Pay:</h4>
+                        <ol>
+                            <li>Open any UPI app (Google Pay, PhonePe, Paytm, etc.)</li>
+                            <li>Tap on "Scan QR Code"</li>
+                            <li>Point your camera at this QR code</li>
+                            <li>Enter the amount shown above</li>
+                            <li>Complete the payment</li>
+                        </ol>
+                        <p><strong>Or manually send payment to:</strong><br>UPI ID: <strong>krishibazaar@ybl</strong></p>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-primary" style="width: 100%; padding: 1rem; font-size: 1.1rem;" id="confirm-upi-payment">I've Made the Payment</button>
+            </div>
+            
+           
+            <div id="card-payment" class="payment-section card-details">
+                <h3>Enter Card Details</h3>
+                <form id="card-form">
+                    <div class="form-group">
+                        <label for="card-number">Card Number</label>
+                        <input type="text" id="card-number" class="form-control" placeholder="1234 5678 9012 3456" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="expiry-date">Expiry Date</label>
+                            <input type="text" id="expiry-date" class="form-control" placeholder="MM/YY" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="cvv">CVV</label>
+                            <input type="text" id="cvv" class="form-control" placeholder="123" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="cardholder-name">Cardholder Name</label>
+                        <input type="text" id="cardholder-name" class="form-control" placeholder="John Doe" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1rem; font-size: 1.1rem;">Pay Now</button>
+                </form>
+            </div>
+            
+            
+            <div id="cod-payment" class="payment-section" style="display: none;">
+                <div style="text-align: center; padding: 2rem;">
+                    <i class="fas fa-money-bill-wave" style="font-size: 4rem; color: #2e7d32;"></i>
+                    <h3>Cash on Delivery Selected</h3>
+                    <p>You will pay when your order is delivered.</p>
+                    <button type="button" class="btn btn-primary" style="width: 100%; padding: 1rem; font-size: 1.1rem;" id="confirm-cod">Confirm Order</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="modal" id="whatsapp-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Contact Seller</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div style="text-align: center; margin-bottom: 1.5rem;">
+                <i class="fab fa-whatsapp" style="font-size: 4rem; color: #25D366;"></i>
+                <p>You're contacting about: <strong id="whatsapp-product-name"></strong></p>
+                <p>Price: <strong id="whatsapp-product-price"></strong></p>
+            </div>
+            <form id="whatsapp-form">
+                <div class="form-group">
+                    <label for="whatsapp-phone">Your WhatsApp Number</label>
+                    <input type="tel" id="whatsapp-phone" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="whatsapp-message">Message</label>
+                    <textarea id="whatsapp-message" class="form-control" rows="3" required>Hi, I'm interested in your product. Please share more details.</textarea>
+                </div>
+                <button type="submit" class="btn whatsapp-btn" style="width: 100%; padding: 1rem; font-size: 1.1rem;">
+                    <i class="fab fa-whatsapp"></i> Send Message
+                </button>
+            </form>
+        </div>
+    </div>
+
+    
+    <div class="modal" id="sell-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Sell Your Product</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="sell-form">
+                <div class="form-group">
+                    <label for="product-name">Product Name</label>
+                    <input type="text" id="product-name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="product-price">Price (₹)</label>
+                    <input type="text" id="product-price" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="product-category">Category</label>
+                    <select id="product-category" class="form-control" required>
+                        <option value="">Select category</option>
+                        <option value="vegetables">Vegetables</option>
+                        <option value="fruits">Fruits</option>
+                        <option value="grains">Grains</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="product-description">Description</label>
+                    <textarea id="product-description" class="form-control" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="product-image">Product Image</label>
+                    <input type="file" id="product-image" class="form-control" accept="image/*">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1rem; font-size: 1.1rem;">List Product</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        
+        const products = [
+            {
+                id: 1,
+                name: "Organic Tomatoes",
+                category: "vegetables",
+                price: 45,
+                quantity: 50,
+                seller: "Green Valley Farms",
+                location: "Punjab, India",
+                description: "Fresh organic tomatoes grown without pesticides. Harvested yesterday.",
+                image: "https://images.unsplash.com/photo-1546470427-e212b7d31095?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
+                harvestDate: "2025-04-15",
+                sellerId: "seller1"
+            },
+            {
+                id: 2,
+                name: "Fresh Apples",
+                category: "fruits",
+                price: 120,
+                quantity: 100,
+                seller: "Himachal Orchard",
+                location: "Himachal Pradesh, India",
+                description: "Crisp and sweet apples from our family orchard. Perfect for eating fresh or baking.",
+                image: "https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
+                harvestDate: "2025-04-10",
+                sellerId: "seller2"
+            },
+            {
+                id: 3,
+                name: "Basmati Rice",
+                category: "grains",
+                price: 85,
+                quantity: 500,
+                seller: "Golden Fields Farm",
+                location: "Haryana, India",
+                description: "Premium quality basmati rice with long grains and aromatic flavor.",
+                image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
+                harvestDate: "2025-03-20",
+                sellerId: "seller3"
+            },
+            {
+                id: 4,
+                name: "Sweet Corn",
+                category: "vegetables",
+                price: 30,
+                quantity: 200,
+                seller: "Riverside Farms",
+                location: "Maharashtra, India",
+                description: "Sweet and tender corn. Great for grilling, boiling, or canning.",
+                image: "https://images.unsplash.com/photo-1571575173700-afb9492e6a50?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
+                harvestDate: "2025-04-12",
+                sellerId: "seller4"
+            },
+            {
+                id: 5,
+                name: "Organic Potatoes",
+                category: "vegetables",
+                price: 25,
+                quantity: 300,
+                seller: "Mountain View Farm",
+                location: "Uttarakhand, India",
+                description: "Organic potatoes with excellent flavor and texture. Great for all cooking methods.",
+                image: "https://images.unsplash.com/photo-1518977676601-b53f82aba655?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
+                harvestDate: "2025-04-05",
+                sellerId: "seller5"
+            },
+            {
+                id: 6,
+                name: "Fresh Strawberries",
+                category: "fruits",
+                price: 180,
+                quantity: 25,
+                seller: "Mahableshwar Farms",
+                location: "Maharashtra, India",
+                description: "Sweet and juicy strawberries. Picked at peak ripeness for maximum flavor.",
+                image: "https://images.unsplash.com/photo-1464454709131-ffd692591ee5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
+                harvestDate: "2025-04-14",
+                sellerId: "seller6"
+            }
+        ];
+
+       
+        const priceData = {
+            "Organic Tomatoes": { price: 45, change: 5 },
+            "Fresh Apples": { price: 120, change: 3 },
+            "Basmati Rice": { price: 85, change: 0 },
+            "Sweet Corn": { price: 30, change: -2 },
+            "Organic Potatoes": { price: 25, change: 1 },
+            "Fresh Strawberries": { price: 180, change: 8 }
+        };
+
+       
+        document.addEventListener('DOMContentLoaded', function() {
+           
+            loadProducts();
+            
+            
+            setupEventListeners();
+            
+          
+            setupSearchAndFilter();
+            
+            
+            startPriceUpdates();
+        });
+
+        function loadProducts() {
+            const productGrid = document.getElementById('product-grid');
+            productGrid.innerHTML = '';
+            
+            products.forEach(product => {
+                const productCard = createProductCard(product);
+                productGrid.appendChild(productCard);
+            });
+        }
+
+        function createProductCard(product) {
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            card.innerHTML = `
+                <img src="${product.image}" alt="${product.name}" class="product-image">
+                <div class="product-info">
+                    <h3 class="product-title">${product.name}</h3>
+                    <div class="product-price">₹${product.price}/kg</div>
+                    <div class="product-seller">
+                        <div class="seller-avatar">${product.seller.charAt(0)}</div>
+                        ${product.seller}
+                    </div>
+                    <div class="product-description">${product.description}</div>
+                    <div class="product-meta">
+                        <span><i class="fas fa-map-marker-alt"></i> ${product.location}</span>
+                        <span><i class="fas fa-box"></i> ${product.quantity} kg</span>
+                    </div>
+                    <div class="product-actions">
+                        <button class="btn btn-primary buy-now-btn" data-id="${product.id}">Buy Now</button>
+                        <button class="btn whatsapp-btn contact-seller-btn" data-id="${product.id}">
+                            <i class="fab fa-whatsapp"></i> Contact
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        function setupEventListeners() {
+            
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('buy-now-btn')) {
+                    const productId = parseInt(e.target.getAttribute('data-id'));
+                    const product = products.find(p => p.id === productId);
+                    
+                    if (product) {
+                        showBuyForm(product.name, `₹${product.price}/kg`, product.price);
+                    }
+                }
+                
+                
+                if (e.target.classList.contains('contact-seller-btn')) {
+                    const productId = parseInt(e.target.getAttribute('data-id'));
+                    const product = products.find(p => p.id === productId);
+                    
+                    if (product) {
+                        showWhatsAppForm(product.name, `₹${product.price}/kg`);
+                    }
+                }
+            });
+            
+            
+            document.querySelectorAll('.close-modal').forEach(button => {
+                button.addEventListener('click', function() {
+                    document.querySelectorAll('.modal').forEach(modal => {
+                        modal.classList.remove('active');
+                    });
+                });
+            });
+            
+           
+            document.getElementById('proceed-to-pay').addEventListener('click', function() {
+                const name = document.getElementById('name').value;
+                const phone = document.getElementById('phone').value;
+                const address = document.getElementById('address').value;
+                const quantity = document.getElementById('quantity').value;
+                
+                if (!name || !phone || !address || !quantity) {
+                    alert('Please fill all the required fields');
+                    return;
+                }
+                
+                const productName = document.getElementById('buy-product-title').textContent;
+                const productPrice = parseFloat(document.getElementById('buy-product-price').textContent.replace('₹', '').replace('/kg', ''));
+                const totalAmount = productPrice * quantity;
+                
+                document.getElementById('payment-product-name').textContent = productName;
+                document.getElementById('payment-total-amount').textContent = totalAmount;
+                
+                document.getElementById('buy-modal').classList.remove('active');
+                document.getElementById('payment-modal').classList.add('active');
+                
+             
+                document.querySelectorAll('.payment-section').forEach(section => {
+                    section.style.display = 'none';
+                });
+                document.querySelectorAll('.payment-method').forEach(method => {
+                    method.classList.remove('selected');
+                });
+            });
+            
+            
+            document.querySelectorAll('.payment-method').forEach(method => {
+                method.addEventListener('click', function() {
+                    document.querySelectorAll('.payment-method').forEach(m => {
+                        m.classList.remove('selected');
+                    });
+                    this.classList.add('selected');
+                    
+                    const paymentType = this.getAttribute('data-method');
+                    
+                    
+                    document.querySelectorAll('.payment-section').forEach(section => {
+                        section.style.display = 'none';
+                    });
+                    
+                    
+                    if (paymentType === 'upi') {
+                        document.getElementById('upi-payment').style.display = 'block';
+                        generateQRCode();
+                    } else if (paymentType === 'card') {
+                        document.getElementById('card-payment').style.display = 'block';
+                    } else if (paymentType === 'cod') {
+                        document.getElementById('cod-payment').style.display = 'block';
+                    }
+                });
+            });
+            
+           
+            document.getElementById('confirm-upi-payment').addEventListener('click', function() {
+                alert('Thank you! Your UPI payment has been confirmed. Your order will be delivered soon.');
+                document.getElementById('payment-modal').classList.remove('active');
+                document.getElementById('order-form').reset();
+            });
+            
+           
+            document.getElementById('confirm-cod').addEventListener('click', function() {
+                alert('Your order has been confirmed! You will pay when the products are delivered.');
+                document.getElementById('payment-modal').classList.remove('active');
+                document.getElementById('order-form').reset();
+            });
+            
+            
+            document.getElementById('card-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Thank you! Your card payment has been processed successfully. Your order will be delivered soon.');
+                document.getElementById('payment-modal').classList.remove('active');
+                document.getElementById('order-form').reset();
+            });
+            
+           
+            document.getElementById('whatsapp-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                sendWhatsAppMessage();
+            });
+            
+            
+            document.getElementById('sell-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                submitProduct();
+            });
+            
+           
+            document.getElementById('browse-marketplace').addEventListener('click', function() {
+                document.getElementById('marketplace').scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+            
+            document.getElementById('sell-now').addEventListener('click', function() {
+                showSellForm();
+            });
+            
+            
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('modal')) {
+                    e.target.classList.remove('active');
+                }
+            });
+        }
+
+        function setupSearchAndFilter() {
+            const searchInput = document.getElementById('search-input');
+            const categoryFilter = document.getElementById('category-filter');
+            const priceFilter = document.getElementById('price-filter');
+            
+            
+            searchInput.addEventListener('input', function() {
+                filterProducts();
+            });
+            
+            
+            categoryFilter.addEventListener('change', function() {
+                filterProducts();
+            });
+            
+            priceFilter.addEventListener('change', function() {
+                filterProducts();
+            });
+        }
+
+        function filterProducts() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const category = document.getElementById('category-filter').value;
+            const priceRange = document.getElementById('price-filter').value;
+            
+            const filteredProducts = products.filter(product => {
+                
+                const matchesSearch = product.name.toLowerCase().includes(searchTerm) || 
+                                     product.description.toLowerCase().includes(searchTerm);
+                
+                
+                const matchesCategory = !category || product.category === category;
+                
+               
+                let matchesPrice = true;
+                if (priceRange) {
+                    if (priceRange === '0-50') {
+                        matchesPrice = product.price >= 0 && product.price <= 50;
+                    } else if (priceRange === '50-100') {
+                        matchesPrice = product.price >= 50 && product.price <= 100;
+                    } else if (priceRange === '100-200') {
+                        matchesPrice = product.price >= 100 && product.price <= 200;
+                    } else if (priceRange === '200+') {
+                        matchesPrice = product.price >= 200;
+                    }
+                }
+                
+                return matchesSearch && matchesCategory && matchesPrice;
+            });
+            
+            
+            const productGrid = document.getElementById('product-grid');
+            productGrid.innerHTML = '';
+            
+            if (filteredProducts.length === 0) {
+                productGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 2rem;">No products found matching your criteria.</p>';
+            } else {
+                filteredProducts.forEach(product => {
+                    const productCard = createProductCard(product);
+                    productGrid.appendChild(productCard);
+                });
+            }
+        }
+
+        function showBuyForm(title, price, basePrice) {
+            document.getElementById('buy-product-title').textContent = title;
+            document.getElementById('buy-product-price').textContent = price;
+            document.getElementById('buy-modal').classList.add('active');
+            
+            
+            document.getElementById('buy-product-price').setAttribute('data-base-price', basePrice);
+        }
+
+        function showWhatsAppForm(title, price) {
+            document.getElementById('whatsapp-product-name').textContent = title;
+            document.getElementById('whatsapp-product-price').textContent = price;
+            document.getElementById('whatsapp-modal').classList.add('active');
+        }
+
+        function showSellForm() {
+            document.getElementById('sell-modal').classList.add('active');
+        }
+
+        function generateQRCode() {
+            const totalAmount = document.getElementById('payment-total-amount').textContent;
+            const productName = document.getElementById('payment-product-name').textContent;
+            const qrElement = document.getElementById('qr-code');
+            qrElement.innerHTML = '';
+            
+           
+            const upiUrl = `upi://pay?pa=krishibazaar@ybl&pn=Krishi%20Bazaar&am=${totalAmount}&cu=INR&tn=Payment%20for%20${encodeURIComponent(productName)}`;
+            
+            
+            QRCode.toCanvas(qrElement, upiUrl, {
+                width: 200,
+                height: 200,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            }, function(error) {
+                if (error) {
+                    console.error('QR Code generation error:', error);
+                   
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 200;
+                    canvas.height = 200;
+                    const ctx = canvas.getContext('2d');
+                    ctx.fillStyle = '#f8f9fa';
+                    ctx.fillRect(0, 0, 200, 200);
+                    ctx.fillStyle = '#dc3545';
+                    ctx.font = '12px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('QR Code Error', 100, 100);
+                    qrElement.appendChild(canvas);
+                }
+            });
+        }
+
+        function sendWhatsAppMessage() {
+            const product = document.getElementById('whatsapp-product-name').textContent;
+            const phone = document.getElementById('whatsapp-phone').value;
+            const message = document.getElementById('whatsapp-message').value;
+            
+        
+            alert(`WhatsApp message prepared!\n\nProduct: ${product}\nTo: ${phone}\nMessage: ${message}\n\nIn a real application, this would open WhatsApp with the message.`);
+            
+            
+            document.getElementById('whatsapp-modal').classList.remove('active');
+            document.getElementById('whatsapp-form').reset();
+        }
+
+        function submitProduct() {
+            const name = document.getElementById('product-name').value;
+            const price = document.getElementById('product-price').value;
+            const category = document.getElementById('product-category').value;
+            const description = document.getElementById('product-description').value;
+            
+           
+            alert(`Product listing submitted for approval!\n\nProduct: ${name}\nPrice: ₹${price}\nCategory: ${category}\nDescription: ${description}\n\nYour product will be reviewed and listed soon.`);
+            
+            
+            document.getElementById('sell-modal').classList.remove('active');
+            document.getElementById('sell-form').reset();
+        }
+
+        function startPriceUpdates() {
+           
+            setInterval(updatePrices, 30000);
+        }
+
+        function updatePrices() {
+            
+            products.forEach(product => {
+                if (priceData[product.name]) {
+                    const change = (Math.random() - 0.5) * 0.1; 
+                    product.price = Math.max(1, Math.round(priceData[product.name].price * (1 + change)));
+                }
+            });
+            
+            
+            loadProducts();
+            
+            
+            updatePriceTicker();
+        }
+
+        function updatePriceTicker() {
+            const tickerItems = document.querySelectorAll('.ticker-item');
+            
+            tickerItems.forEach((item, index) => {
+                if (index < products.length) {
+                    const product = products[index];
+                    const cropName = item.querySelector('.ticker-crop');
+                    const price = item.querySelector('.ticker-price');
+                    const change = item.querySelector('.ticker-change');
+                    
+                    cropName.textContent = product.name + ":";
+                    price.textContent = `₹${product.price}/kg`;
+                    
+                   
+                    if (priceData[product.name]) {
+                        const priceChange = priceData[product.name].change;
+                        change.textContent = priceChange > 0 ? `↑ ${priceChange}%` : 
+                                           priceChange < 0 ? `↓ ${Math.abs(priceChange)}%` : `→ 0%`;
+                        change.className = `ticker-change ${priceChange > 0 ? 'up' : priceChange < 0 ? 'down' : ''}`;
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
